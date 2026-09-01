@@ -7,7 +7,6 @@ import { CustomerModal } from './components/CustomerModal';
 import { DeleteModal } from './components/DeleteModal';
 import { Toast } from './components/Toast';
 import { customerService } from './services/api';
-import { Sparkles, Users, RefreshCw } from 'lucide-react';
 
 export function App() {
   const [customers, setCustomers] = useState([]);
@@ -20,13 +19,11 @@ export function App() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('nextFollowUpDate');
 
-  // Modals state
   const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deletingCustomer, setDeletingCustomer] = useState(null);
 
-  // Operation states
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [contactingId, setContactingId] = useState(null);
@@ -36,11 +33,9 @@ export function App() {
     setToast({ message, type });
   };
 
-  // Fetch all customers & separate due lists
   const fetchDashboardData = useCallback(async () => {
     setIsLoading(true);
     try {
-      // 1. Fetch filtered list for table
       const res = await customerService.getCustomers({
         search: searchQuery,
         status: statusFilter,
@@ -54,7 +49,7 @@ export function App() {
         }
       }
 
-      // 2. Fetch Due & Overdue customers for priority actionable section
+     
       const dueRes = await customerService.getDueCustomers();
       if (dueRes.success) {
         setDueCustomers(dueRes.dueToday?.customers || []);
@@ -82,7 +77,6 @@ export function App() {
       const res = await customerService.markContacted(customerId);
       if (res.success) {
         showToast(res.message || 'Marked customer as contacted!', 'success');
-        // Refresh data to update Due list, All list, and Metrics
         await fetchDashboardData();
       }
     } catch (error) {
@@ -93,7 +87,6 @@ export function App() {
     }
   };
 
-  // Handle Add / Edit Customer submit
   const handleSaveCustomer = async (formData) => {
     setIsSubmitting(true);
     try {
@@ -123,7 +116,6 @@ export function App() {
     }
   };
 
-  // Handle Delete confirmation
   const handleConfirmDelete = async () => {
     if (!deletingCustomer) return;
     setIsDeleting(true);
@@ -145,8 +137,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-['Inter',sans-serif]">
-      {/* Navigation Header */}
+    <div className="min-h-screen bg-[#f4f1ec] text-slate-800 flex flex-col font-['Inter',sans-serif]">
       <Navbar
         onAddCustomer={() => {
           setEditingCustomer(null);
@@ -156,9 +147,8 @@ export function App() {
         isLoading={isLoading}
       />
 
-      {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
-        {/* Quick Stats Grid */}
+
         <section>
           <StatsCards
             metrics={metrics}
@@ -167,14 +157,13 @@ export function App() {
           />
         </section>
 
-        {/* Priority Action: Due Today & Overdue Section */}
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                 Priority Action Board
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Customers due for outreach today or needing immediate attention
               </p>
             </div>
@@ -192,8 +181,7 @@ export function App() {
           />
         </section>
 
-        {/* Complete Customer Directory */}
-        <section className="pt-4 border-t border-slate-800">
+        <section className="pt-4 border-t border-[#e2dbcb]">
           <CustomerTable
             customers={customers}
             searchQuery={searchQuery}
@@ -220,12 +208,10 @@ export function App() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="mt-auto border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-500">
+      <footer className="mt-auto border-t border-[#e2dbcb] bg-[#f4f1ec] py-6 text-center text-xs text-slate-500">
         <p>Customer Follow-up Tracker &bull; Dynamic Follow-up Scheduling Engine</p>
       </footer>
 
-      {/* Modals & Notifications */}
       <CustomerModal
         isOpen={isCustomerModalOpen}
         onClose={() => {

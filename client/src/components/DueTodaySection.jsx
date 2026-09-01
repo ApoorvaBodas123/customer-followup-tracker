@@ -13,19 +13,19 @@ export const DueTodaySection = ({
 
   if (totalActionItems === 0) {
     return (
-      <div className="rounded-2xl bg-slate-900/60 border border-slate-800 p-8 sm:p-10 text-center relative overflow-hidden">
-        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 mx-auto flex items-center justify-center mb-3">
+      <div className="rounded-2xl bg-white border border-[#e2dbcb] p-8 sm:p-10 text-center relative overflow-hidden shadow-sm">
+        <div className="w-12 h-12 rounded-2xl bg-[#4cc9b1]/20 text-[#0f766e] mx-auto flex items-center justify-center mb-3">
           <CheckCircle2 className="w-6 h-6" />
         </div>
-        <h3 className="text-base sm:text-lg font-semibold text-white">All caught up for today!</h3>
-        <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mt-1 mb-5">
-          No customer follow-ups are pending right now. Great job keeping your client relationships active.
+        <h3 className="text-base sm:text-lg font-bold text-slate-900">All caught up for today!</h3>
+        <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-1 mb-5">
+          No customer follow-ups are pending right now.
         </p>
         <button
           onClick={onAddCustomer}
-          className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs sm:text-sm font-medium transition-all"
+          className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#f4f1ec] hover:bg-[#e2dbcb] text-slate-800 border border-[#e2dbcb] text-xs sm:text-sm font-semibold transition-all"
         >
-          <Plus className="w-4 h-4 text-emerald-400" />
+          <Plus className="w-4 h-4 text-[#0f766e]" />
           <span>Add a New Customer</span>
         </button>
       </div>
@@ -34,7 +34,6 @@ export const DueTodaySection = ({
 
   return (
     <div className="space-y-6">
-      {/* Overdue Section Banner if any */}
       {overdueCustomers.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -43,12 +42,12 @@ export const DueTodaySection = ({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
               </span>
-              <h2 className="text-base sm:text-lg font-bold text-rose-400 flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4" />
+              <h2 className="text-base sm:text-lg font-bold text-rose-800 flex items-center gap-1.5">
+                <AlertTriangle className="w-4 h-4 text-rose-600" />
                 Overdue Follow-ups ({overdueCustomers.length})
               </h2>
             </div>
-            <span className="text-xs text-rose-400/80 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20 font-medium">
+            <span className="text-xs text-rose-800 bg-rose-100 px-2.5 py-1 rounded-full border border-rose-300 font-bold">
               High Priority
             </span>
           </div>
@@ -67,7 +66,6 @@ export const DueTodaySection = ({
         </div>
       )}
 
-      {/* Due Today Section */}
       {dueCustomers.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -76,12 +74,12 @@ export const DueTodaySection = ({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
               </span>
-              <h2 className="text-base sm:text-lg font-bold text-amber-300 flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-amber-400" />
+              <h2 className="text-base sm:text-lg font-bold text-amber-900 flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-amber-600" />
                 Follow-ups Due Today ({dueCustomers.length})
               </h2>
             </div>
-            <span className="text-xs text-amber-400/80 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20 font-medium">
+            <span className="text-xs text-amber-900 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-300 font-bold">
               Due Today
             </span>
           </div>
@@ -108,31 +106,31 @@ const CustomerDueCard = ({ customer, isOverdue, onMarkContacted, isContacting })
 
   return (
     <div
-      className={`p-5 rounded-2xl bg-slate-900/90 border transition-all duration-200 shadow-lg ${
+      className={`p-5 rounded-2xl bg-white border transition-all duration-200 shadow-sm hover:shadow-md ${
         isOverdue
-          ? 'border-rose-500/30 hover:border-rose-500/60 shadow-rose-950/20'
-          : 'border-amber-500/30 hover:border-amber-500/60 shadow-amber-950/20'
+          ? 'border-rose-300 hover:border-rose-400'
+          : 'border-amber-300 hover:border-amber-400'
       }`}
     >
       {/* Header: Name and Status */}
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
             {customer.name}
           </h3>
           {customer.company && (
-            <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-              <Building2 className="w-3.5 h-3.5 text-slate-500" />
+            <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+              <Building2 className="w-3.5 h-3.5 text-[#0d9488]" />
               {customer.company}
             </p>
           )}
         </div>
 
         <span
-          className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border ${
+          className={`text-[11px] font-bold px-2.5 py-1 rounded-full border ${
             isOverdue
-              ? 'bg-rose-500/15 text-rose-300 border-rose-500/30'
-              : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+              ? 'bg-rose-100 text-rose-800 border-rose-300'
+              : 'bg-amber-100 text-amber-800 border-amber-300'
           }`}
         >
           {isOverdue ? `Overdue (${Math.abs(customer.daysRemaining || 1)}d)` : 'Due Today'}
@@ -140,25 +138,25 @@ const CustomerDueCard = ({ customer, isOverdue, onMarkContacted, isContacting })
       </div>
 
       {/* Contact Details */}
-      <div className="mt-3.5 space-y-1.5 text-xs text-slate-300">
+      <div className="mt-3.5 space-y-1.5 text-xs text-slate-700">
         {customer.phone && (
           <a
             href={`tel:${customer.phone}`}
-            className="flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors group"
+            className="flex items-center gap-2 text-slate-700 hover:text-[#0d9488] transition-colors group"
           >
-            <span className="p-1 rounded-md bg-slate-800 text-emerald-400 group-hover:bg-emerald-500/20">
+            <span className="p-1 rounded-md bg-[#f4f1ec] text-[#0d9488] group-hover:bg-[#4cc9b1]/20">
               <Phone className="w-3.5 h-3.5" />
             </span>
-            <span className="font-mono">{customer.phone}</span>
+            <span className="font-mono font-medium">{customer.phone}</span>
           </a>
         )}
 
         {customer.email && (
           <a
             href={`mailto:${customer.email}`}
-            className="flex items-center gap-2 text-slate-300 hover:text-teal-400 transition-colors group"
+            className="flex items-center gap-2 text-slate-700 hover:text-[#0d9488] transition-colors group"
           >
-            <span className="p-1 rounded-md bg-slate-800 text-teal-400 group-hover:bg-teal-500/20">
+            <span className="p-1 rounded-md bg-[#f4f1ec] text-[#0d9488] group-hover:bg-[#4cc9b1]/20">
               <Mail className="w-3.5 h-3.5" />
             </span>
             <span className="truncate">{customer.email}</span>
@@ -166,38 +164,36 @@ const CustomerDueCard = ({ customer, isOverdue, onMarkContacted, isContacting })
         )}
       </div>
 
-      {/* Follow-up Details Info Box */}
-      <div className="mt-4 p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-between text-xs">
+      <div className="mt-4 p-3 rounded-xl bg-[#f4f1ec] border border-[#e2dbcb] flex items-center justify-between text-xs">
         <div>
-          <span className="text-slate-400 block text-[11px]">Last Contacted</span>
-          <span className="font-medium text-slate-200">
+          <span className="text-slate-500 block text-[11px]">Last Contacted</span>
+          <span className="font-semibold text-slate-800">
             {formatDate(customer.lastContactedAt)}
           </span>
         </div>
 
         <div className="text-right">
-          <span className="text-slate-400 block text-[11px]">Interval</span>
-          <span className="font-semibold text-emerald-400">
+          <span className="text-slate-500 block text-[11px]">Interval</span>
+          <span className="font-bold text-[#0f766e]">
             Every {customer.followUpInterval} days
           </span>
         </div>
       </div>
 
       {customer.notes && (
-        <p className="mt-2.5 text-xs text-slate-400 italic line-clamp-1">
+        <p className="mt-2.5 text-xs text-slate-500 italic line-clamp-1">
           &ldquo;{customer.notes}&rdquo;
         </p>
       )}
 
-      {/* Action CTA: Mark as Contacted */}
-      <div className="mt-4 pt-3 border-t border-slate-800/80">
+      <div className="mt-4 pt-3 border-t border-[#e2dbcb]">
         <button
           onClick={() => onMarkContacted(customerId)}
           disabled={isContacting}
-          className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center space-x-2 transition-all shadow-md ${
+          className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition-all shadow-sm ${
             isOverdue
-              ? 'bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white shadow-rose-600/20'
-              : 'bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-slate-950 shadow-emerald-600/20'
+              ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-rose-600/20'
+              : 'bg-[#4cc9b1] hover:bg-[#38b8a0] text-slate-950 shadow-[#4cc9b1]/25'
           } disabled:opacity-50`}
         >
           <CheckCircle2 className={`w-4 h-4 ${isContacting ? 'animate-spin' : ''}`} />

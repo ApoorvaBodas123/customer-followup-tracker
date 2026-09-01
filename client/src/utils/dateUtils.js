@@ -47,33 +47,33 @@ export const getStatusBadgeInfo = (status, daysRemaining) => {
     case 'due_today':
       return {
         label: 'Due Today',
-        bg: 'bg-amber-500/15',
-        text: 'text-amber-400',
-        border: 'border-amber-500/30',
-        dot: 'bg-amber-400 animate-pulse',
+        bg: 'bg-amber-100',
+        text: 'text-amber-800',
+        border: 'border-amber-300',
+        dot: 'bg-amber-500 animate-pulse',
       };
     case 'overdue':
       return {
         label: `Overdue by ${Math.abs(daysRemaining || 1)}d`,
-        bg: 'bg-rose-500/15',
-        text: 'text-rose-400',
-        border: 'border-rose-500/30',
+        bg: 'bg-rose-100',
+        text: 'text-rose-800',
+        border: 'border-rose-300',
         dot: 'bg-rose-500',
       };
     case 'upcoming':
       return {
         label: daysRemaining === 1 ? 'In 1 day' : `In ${daysRemaining} days`,
-        bg: 'bg-emerald-500/15',
-        text: 'text-emerald-400',
-        border: 'border-emerald-500/30',
-        dot: 'bg-emerald-400',
+        bg: 'bg-[#4cc9b1]/15',
+        text: 'text-[#0f766e]',
+        border: 'border-[#4cc9b1]/50',
+        dot: 'bg-[#4cc9b1]',
       };
     default:
       return {
         label: 'Pending',
-        bg: 'bg-slate-500/15',
-        text: 'text-slate-400',
-        border: 'border-slate-500/30',
+        bg: 'bg-[#e2dbcb]/40',
+        text: 'text-slate-700',
+        border: 'border-[#e2dbcb]',
         dot: 'bg-slate-400',
       };
   }

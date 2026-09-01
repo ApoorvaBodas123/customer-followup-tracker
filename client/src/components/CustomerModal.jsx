@@ -45,21 +45,17 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
 
   if (!isOpen) return null;
 
-  // Real-time calculation of Next Follow-up Date preview
   const calculatedNextDate = calculateNextDate(formData.lastContactedAt, formData.followUpInterval);
 
-  // Form validation
   const validate = () => {
     const newErrors = {};
 
-    // 1. Name validation
     if (!formData.name.trim()) {
       newErrors.name = 'Customer name is required';
     } else if (formData.name.trim().length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
     }
 
-    // 2. Contact validation (phone or email)
     const hasPhone = Boolean(formData.phone.trim());
     const hasEmail = Boolean(formData.email.trim());
 
@@ -82,7 +78,6 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
       }
     }
 
-    // 3. Follow-up interval
     const intervalNum = Number(formData.followUpInterval);
     if (!formData.followUpInterval || isNaN(intervalNum)) {
       newErrors.followUpInterval = 'Interval must be a valid number';
@@ -92,13 +87,11 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
       newErrors.followUpInterval = 'Interval must be at least 1 day';
     }
 
-    // 4. Last Contacted Date
     if (!formData.lastContactedAt) {
       newErrors.lastContactedAt = 'Last contacted date is required';
     } else {
       const selectedDate = new Date(formData.lastContactedAt);
       const today = new Date();
-      // Set today to end of day for forgiving comparison
       today.setHours(23, 59, 59, 999);
       if (selectedDate > today) {
         newErrors.lastContactedAt = 'Last contacted date cannot be in the future';
@@ -127,19 +120,18 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:p-7 shadow-2xl overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg rounded-2xl bg-white border border-[#e2dbcb] p-6 sm:p-7 shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between pb-4 border-b border-[#e2dbcb]">
           <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
+            <div className="p-2 rounded-xl bg-[#4cc9b1]/20 text-[#0f766e]">
               <User className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">
+              <h2 className="text-lg font-bold text-slate-900">
                 {isEditing ? 'Edit Customer' : 'Add Customer'}
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 {isEditing ? 'Update customer profile and schedule' : 'Set contact details and follow-up rhythm'}
               </p>
             </div>
@@ -147,7 +139,7 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-[#f4f1ec] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -157,8 +149,8 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Customer Name <span className="text-rose-400">*</span>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Customer Name <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
               <input
@@ -166,15 +158,15 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
                 placeholder="e.g. Rahul Sharma"
                 value={formData.name}
                 onChange={(e) => handleChange('name', e.target.value)}
-                className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-950/70 border text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 ${
+                className={`w-full px-3.5 py-2.5 rounded-xl bg-[#f4f1ec] border text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 ${
                   errors.name
-                    ? 'border-rose-500/80 focus:border-rose-500 focus:ring-rose-500'
-                    : 'border-slate-800 focus:border-emerald-500 focus:ring-emerald-500'
+                    ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-400'
+                    : 'border-[#e2dbcb] focus:border-[#4cc9b1] focus:ring-[#4cc9b1]'
                 }`}
               />
             </div>
             {errors.name && (
-              <p className="mt-1 text-xs text-rose-400 flex items-center gap-1">
+              <p className="mt-1 text-xs text-rose-600 flex items-center gap-1">
                 <AlertCircle className="w-3 h-3" /> {errors.name}
               </p>
             )}
@@ -184,8 +176,8 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {/* Phone */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Phone Number <span className="text-slate-500 font-normal">(e.g. 9876543210)</span>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                Phone Number <span className="text-slate-400 font-normal">(e.g. 9876543210)</span>
               </label>
               <div className="relative">
                 <input
@@ -193,15 +185,15 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
                   placeholder="+91 9876543210"
                   value={formData.phone}
                   onChange={(e) => handleChange('phone', e.target.value)}
-                  className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-950/70 border text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 ${
+                  className={`w-full px-3.5 py-2.5 rounded-xl bg-[#f4f1ec] border text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 ${
                     errors.phone
-                      ? 'border-rose-500/80 focus:border-rose-500 focus:ring-rose-500'
-                      : 'border-slate-800 focus:border-emerald-500 focus:ring-emerald-500'
+                      ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-400'
+                      : 'border-[#e2dbcb] focus:border-[#4cc9b1] focus:ring-[#4cc9b1]'
                   }`}
                 />
               </div>
               {errors.phone && (
-                <p className="mt-1 text-xs text-rose-400 flex items-center gap-1">
+                <p className="mt-1 text-xs text-rose-600 flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" /> {errors.phone}
                 </p>
               )}
@@ -209,7 +201,7 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
 
             {/* Email */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 Email Address
               </label>
               <div className="relative">
@@ -218,15 +210,15 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
                   placeholder="rahul@example.com"
                   value={formData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
-                  className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-950/70 border text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 ${
+                  className={`w-full px-3.5 py-2.5 rounded-xl bg-[#f4f1ec] border text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 ${
                     errors.email
-                      ? 'border-rose-500/80 focus:border-rose-500 focus:ring-rose-500'
-                      : 'border-slate-800 focus:border-emerald-500 focus:ring-emerald-500'
+                      ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-400'
+                      : 'border-[#e2dbcb] focus:border-[#4cc9b1] focus:ring-[#4cc9b1]'
                   }`}
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-xs text-rose-400 flex items-center gap-1">
+                <p className="mt-1 text-xs text-rose-600 flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" /> {errors.email}
                 </p>
               )}
@@ -235,15 +227,15 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
 
           {/* Company (Optional) */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Company / Organization <span className="text-slate-500 font-normal">(optional)</span>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Company / Organization <span className="text-slate-400 font-normal">(optional)</span>
             </label>
             <input
               type="text"
               placeholder="e.g. Apex Logistics"
               value={formData.company}
               onChange={(e) => handleChange('company', e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm text-white placeholder:text-slate-600 focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#f4f1ec] border border-[#e2dbcb] focus:border-[#4cc9b1] focus:ring-1 focus:ring-[#4cc9b1] text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
             />
           </div>
 
@@ -251,8 +243,8 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {/* Follow-up Interval */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Follow-up Interval <span className="text-rose-400">*</span>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                Follow-up Interval <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
                 <input
@@ -262,18 +254,18 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
                   placeholder="7"
                   value={formData.followUpInterval}
                   onChange={(e) => handleChange('followUpInterval', e.target.value)}
-                  className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-950/70 border text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 ${
+                  className={`w-full px-3.5 py-2.5 rounded-xl bg-[#f4f1ec] border text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 ${
                     errors.followUpInterval
-                      ? 'border-rose-500/80 focus:border-rose-500 focus:ring-rose-500'
-                      : 'border-slate-800 focus:border-emerald-500 focus:ring-emerald-500'
+                      ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-400'
+                      : 'border-[#e2dbcb] focus:border-[#4cc9b1] focus:ring-[#4cc9b1]'
                   }`}
                 />
-                <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-slate-500 pointer-events-none">
+                <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none">
                   days
                 </span>
               </div>
               {errors.followUpInterval && (
-                <p className="mt-1 text-xs text-rose-400 flex items-center gap-1">
+                <p className="mt-1 text-xs text-rose-600 flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" /> {errors.followUpInterval}
                 </p>
               )}
@@ -281,22 +273,22 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
 
             {/* Last Contacted Date */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Last Contacted Date <span className="text-rose-400">*</span>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                Last Contacted Date <span className="text-rose-500">*</span>
               </label>
               <input
                 type="date"
                 max={formatDateForInput()}
                 value={formData.lastContactedAt}
                 onChange={(e) => handleChange('lastContactedAt', e.target.value)}
-                className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-950/70 border text-sm text-white focus:outline-none focus:ring-1 ${
+                className={`w-full px-3.5 py-2.5 rounded-xl bg-[#f4f1ec] border text-sm text-slate-900 focus:outline-none focus:ring-1 ${
                   errors.lastContactedAt
-                    ? 'border-rose-500/80 focus:border-rose-500 focus:ring-rose-500'
-                    : 'border-slate-800 focus:border-emerald-500 focus:ring-emerald-500'
+                    ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-400'
+                    : 'border-[#e2dbcb] focus:border-[#4cc9b1] focus:ring-[#4cc9b1]'
                 }`}
               />
               {errors.lastContactedAt && (
-                <p className="mt-1 text-xs text-rose-400 flex items-center gap-1">
+                <p className="mt-1 text-xs text-rose-600 flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" /> {errors.lastContactedAt}
                 </p>
               )}
@@ -305,12 +297,12 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
 
           {/* Next Follow-up Live Preview Banner */}
           {calculatedNextDate && (
-            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-between text-xs text-emerald-300">
+            <div className="p-3 rounded-xl bg-[#4cc9b1]/15 border border-[#4cc9b1]/40 flex items-center justify-between text-xs text-[#0f766e]">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Next follow-up calculated:</span>
+                <Sparkles className="w-4 h-4 text-[#0d9488] shrink-0" />
+                <span className="font-semibold">Next follow-up calculated:</span>
               </div>
-              <span className="font-bold text-white">
+              <span className="font-bold text-slate-900">
                 {formatDate(calculatedNextDate)}
               </span>
             </div>
@@ -318,31 +310,31 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
 
           {/* Notes (Optional) */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Notes / Context <span className="text-slate-500 font-normal">(optional)</span>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Notes / Context <span className="text-slate-400 font-normal">(optional)</span>
             </label>
             <textarea
               rows="2"
               placeholder="e.g. Contract discussion, requested product demo..."
               value={formData.notes}
               onChange={(e) => handleChange('notes', e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm text-white placeholder:text-slate-600 focus:outline-none resize-none"
+              className="w-full px-3.5 py-2 rounded-xl bg-[#f4f1ec] border border-[#e2dbcb] focus:border-[#4cc9b1] focus:ring-1 focus:ring-[#4cc9b1] text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none resize-none"
             />
           </div>
 
           {/* Actions */}
-          <div className="mt-6 pt-4 border-t border-slate-800 flex items-center justify-end space-x-3">
+          <div className="mt-6 pt-4 border-t border-[#e2dbcb] flex items-center justify-end space-x-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition-colors"
+              className="px-4 py-2.5 rounded-xl border border-[#e2dbcb] bg-[#f4f1ec] hover:bg-[#e2dbcb] text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-xs sm:text-sm font-bold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all disabled:opacity-50"
+              className="px-5 py-2.5 rounded-xl bg-[#4cc9b1] hover:bg-[#38b8a0] text-slate-950 text-xs sm:text-sm font-bold shadow-md shadow-[#4cc9b1]/30 transition-all disabled:opacity-50"
             >
               {isSubmitting
                 ? 'Saving...'

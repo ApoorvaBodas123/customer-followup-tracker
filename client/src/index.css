@@ -2,9 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --turquoise: #4cc9b1;
+  --parchment: #f4f1ec;
+  --bone: #e2dbcb;
+}
+
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100;
+    background-color: var(--parchment);
+    color: #1e293b;
+    min-height: 100vh;
   }
 }
 
@@ -15,14 +23,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f4f1ec;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #e2dbcb;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #4cc9b1;
 }
