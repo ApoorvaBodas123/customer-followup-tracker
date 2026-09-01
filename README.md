@@ -133,7 +133,7 @@ DELETE /api/customers/:id
 
 ### Prerequisites
 - Node.js (v18+)
-- MongoDB running locally on `mongodb://127.0.0.1:27017` (or MongoDB Atlas URI in `.env`)
+- MongoDB Atlas URI or MongoDB running locally on `mongodb://127.0.0.1:27017`
 
 ---
 
@@ -142,9 +142,8 @@ DELETE /api/customers/:id
 ```bash
 cd server
 npm install
-# Create .env (already configured with PORT=5001 and MONGODB_URI)
-npm run seed     # (Optional) Populates sample customers (Due Today, Overdue, Upcoming)
-npm run dev      # Starts Express server on http://localhost:5001
+# Configure .env with MONGODB_URI and PORT
+npm run dev      # Starts Express server on http://localhost:5000
 ```
 
 ---
@@ -158,3 +157,23 @@ npm run dev      # Starts Vite React dev server on http://localhost:5173
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser to interact with the application!
+
+---
+
+## 🌐 Deployment Guide
+
+### Deploying Backend (Render)
+- **Root Directory**: `server`
+- **Build Command**: `npm install`
+- **Start Command**: `npm start`
+- **Environment Variables**:
+  - `MONGODB_URI`: `<your_mongodb_atlas_connection_string>`
+  - `NODE_ENV`: `production`
+
+### Deploying Frontend (Vercel)
+- **Framework Preset**: `Vite`
+- **Root Directory**: `client`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Environment Variables**:
+  - `VITE_API_BASE_URL`: `https://<your-render-backend-url>/api`
