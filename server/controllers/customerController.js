@@ -185,12 +185,37 @@ export const createCustomer = async (req, res) => {
   try {
     const { name, email, phone, company, followUpInterval, lastContactedAt, notes } = req.body;
 
+    const trimmedPhone = phone.trim();
+    const trimmedEmail = email ? email.trim().toLowerCase() : null;
+
+    // Check for duplicate phone number
+    const existingPhone = await Customer.findOne({ phone: trimmedPhone });
+    if (existingPhone) {
+      return res.status(409).json({
+        success: false,
+        message: `A customer with phone number "${trimmedPhone}" already exists (${existingPhone.name})`,
+        errors: [`A customer with phone number "${trimmedPhone}" already exists (${existingPhone.name})`],
+      });
+    }
+
+    // Check for duplicate email if provided
+    if (trimmedEmail) {
+      const existingEmail = await Customer.findOne({ email: trimmedEmail });
+      if (existingEmail) {
+        return res.status(409).json({
+          success: false,
+          message: `A customer with email "${trimmedEmail}" already exists (${existingEmail.name})`,
+          errors: [`A customer with email "${trimmedEmail}" already exists (${existingEmail.name})`],
+        });
+      }
+    }
+
     const contactDate = lastContactedAt ? new Date(lastContactedAt) : new Date();
 
     const customer = new Customer({
       name: name.trim(),
-      email: email ? email.trim() : undefined,
-      phone: phone ? phone.trim() : undefined,
+      email: trimmedEmail || undefined,
+      phone: trimmedPhone,
       company: company ? company.trim() : '',
       followUpInterval: Number(followUpInterval),
       lastContactedAt: contactDate,
@@ -236,9 +261,45 @@ export const updateCustomer = async (req, res) => {
       });
     }
 
+    // Check duplicate phone for another customer
+    if (phone !== undefined) {
+      const trimmedPhone = phone.trim();
+      const existingPhone = await Customer.findOne({
+        phone: trimmedPhone,
+        _id: { $ne: req.params.id },
+      });
+      if (existingPhone) {
+        return res.status(409).json({
+          success: false,
+          message: `Another customer with phone number "${trimmedPhone}" already exists (${existingPhone.name})`,
+          errors: [`Another customer with phone number "${trimmedPhone}" already exists (${existingPhone.name})`],
+        });
+      }
+      customer.phone = trimmedPhone;
+    }
+
+    // Check duplicate email for another customer
+    if (email !== undefined) {
+      const trimmedEmail = email.trim().toLowerCase();
+      if (trimmedEmail) {
+        const existingEmail = await Customer.findOne({
+          email: trimmedEmail,
+          _id: { $ne: req.params.id },
+        });
+        if (existingEmail) {
+          return res.status(409).json({
+            success: false,
+            message: `Another customer with email "${trimmedEmail}" already exists (${existingEmail.name})`,
+            errors: [`Another customer with email "${trimmedEmail}" already exists (${existingEmail.name})`],
+          });
+        }
+        customer.email = trimmedEmail;
+      } else {
+        customer.email = undefined;
+      }
+    }
+
     if (name !== undefined) customer.name = name.trim();
-    if (email !== undefined) customer.email = email.trim();
-    if (phone !== undefined) customer.phone = phone.trim();
     if (company !== undefined) customer.company = company.trim();
     if (followUpInterval !== undefined) customer.followUpInterval = Number(followUpInterval);
     if (lastContactedAt !== undefined) customer.lastContactedAt = new Date(lastContactedAt);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Phone, Mail, CheckCircle2, Building2, Calendar, Clock, AlertTriangle, ArrowRight, Plus } from 'lucide-react';
-import { formatDate, formatShortDate } from '../utils/dateUtils';
+import { formatDate } from '../utils/dateUtils';
 
 export const DueTodaySection = ({
   dueCustomers = [],

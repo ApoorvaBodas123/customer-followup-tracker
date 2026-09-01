@@ -1,6 +1,6 @@
 import React from 'react';
-import { Search, Filter, Phone, Mail, Edit, Trash2, CheckCircle, ArrowUpDown, Plus, Building2, Calendar } from 'lucide-react';
-import { formatDate, formatShortDate, getStatusBadgeInfo } from '../utils/dateUtils';
+import { Search, Phone, Mail, Edit, Trash2, CheckCircle, ArrowUpDown, Plus, Building2, Calendar } from 'lucide-react';
+import { formatDate, getStatusBadgeInfo } from '../utils/dateUtils';
 
 export const CustomerTable = ({
   customers = [],

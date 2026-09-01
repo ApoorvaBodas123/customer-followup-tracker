@@ -9,28 +9,30 @@ const customerSchema = new mongoose.Schema(
       minlength: [2, 'Name must be at least 2 characters long'],
       maxlength: [100, 'Name cannot exceed 100 characters'],
     },
+    phone: {
+      type: String,
+      required: [true, 'Phone number is required'],
+      trim: true,
+      validate: {
+        validator: function (v) {
+          if (!v) return false;
+          const cleanDigits = v.replace(/\D/g, '');
+          const validPhonePattern = /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{7,15}$/;
+          return cleanDigits.length >= 10 && cleanDigits.length <= 15 && validPhonePattern.test(v);
+        },
+        message: (props) => `${props.value} is not a valid 10 to 15 digit phone number`,
+      },
+    },
     email: {
       type: String,
       trim: true,
       lowercase: true,
       validate: {
         validator: function (v) {
-          if (!v) return true; // optional
-          return /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v);
+          if (!v || v.trim() === '') return true; // optional
+          return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v);
         },
         message: (props) => `${props.value} is not a valid email address`,
-      },
-    },
-    phone: {
-      type: String,
-      trim: true,
-      validate: {
-        validator: function (v) {
-          if (!v) return true; // optional
-          // Validates 7-15 digit phone numbers with optional + and spaces/dashes
-          return /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{6,15}$/.test(v);
-        },
-        message: (props) => `${props.value} is not a valid phone number`,
       },
     },
     company: {
@@ -85,15 +87,6 @@ const customerSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-
-// Require at least one contact method (email or phone)
-customerSchema.pre('validate', function (next) {
-  if (!this.email && !this.phone) {
-    this.invalidate('email', 'At least one contact method (email or phone) is required');
-    this.invalidate('phone', 'At least one contact method (email or phone) is required');
-  }
-  next();
-});
 
 // Virtual: Calculated Next Follow-up Date
 // nextFollowUpDate = lastContactedAt + (followUpInterval * 24h)

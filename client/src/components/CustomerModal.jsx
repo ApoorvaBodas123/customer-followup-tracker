@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { X, Calendar, User, Phone, Mail, Building2, Clock, AlertCircle, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { X, User, AlertCircle, Sparkles } from 'lucide-react';
 import { formatDateForInput, calculateNextDate, formatDate } from '../utils/dateUtils';
 
 export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isSubmitting = false }) => {
@@ -50,31 +50,31 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
   const validate = () => {
     const newErrors = {};
 
+    // 1. Name validation
     if (!formData.name.trim()) {
       newErrors.name = 'Customer name is required';
     } else if (formData.name.trim().length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
     }
 
-    const hasPhone = Boolean(formData.phone.trim());
-    const hasEmail = Boolean(formData.email.trim());
-
-    if (!hasPhone && !hasEmail) {
-      newErrors.phone = 'At least one contact method (Phone or Email) is required';
-      newErrors.email = 'At least one contact method (Phone or Email) is required';
-    }
-
-    if (hasEmail) {
-      const emailRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-      if (!emailRegex.test(formData.email.trim())) {
-        newErrors.email = 'Please enter a valid email address';
+    // 2. Phone validation (Strictly required, 10-15 digits)
+    const trimmedPhone = formData.phone.trim();
+    if (!trimmedPhone) {
+      newErrors.phone = 'Phone number is required';
+    } else {
+      const cleanDigits = trimmedPhone.replace(/\D/g, '');
+      const validPhonePattern = /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{7,15}$/;
+      if (cleanDigits.length < 10 || cleanDigits.length > 15 || !validPhonePattern.test(trimmedPhone)) {
+        newErrors.phone = 'Please enter a valid 10 to 15 digit phone number (e.g. 9876543210 or +91 9876543210)';
       }
     }
 
-    if (hasPhone) {
-      const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{6,15}$/;
-      if (!phoneRegex.test(formData.phone.trim())) {
-        newErrors.phone = 'Please enter a valid phone number';
+    // 3. Email validation (Optional, but if entered must be valid)
+    const trimmedEmail = formData.email.trim();
+    if (trimmedEmail) {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(trimmedEmail)) {
+        newErrors.email = 'Please enter a valid email address (e.g. name@example.com)';
       }
     }
 
@@ -172,12 +172,10 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
             )}
           </div>
 
-          {/* Contact Details Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            {/* Phone */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                Phone Number <span className="text-slate-400 font-normal">(e.g. 9876543210)</span>
+                Phone Number <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
                 <input
@@ -199,7 +197,6 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
               )}
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 Email Address
@@ -225,7 +222,6 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
             </div>
           </div>
 
-          {/* Company (Optional) */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
               Company / Organization <span className="text-slate-400 font-normal">(optional)</span>
@@ -239,9 +235,7 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
             />
           </div>
 
-          {/* Follow-up Schedule Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            {/* Follow-up Interval */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 Follow-up Interval <span className="text-rose-500">*</span>
@@ -271,7 +265,6 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
               )}
             </div>
 
-            {/* Last Contacted Date */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 Last Contacted Date <span className="text-rose-500">*</span>
@@ -295,7 +288,6 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
             </div>
           </div>
 
-          {/* Next Follow-up Live Preview Banner */}
           {calculatedNextDate && (
             <div className="p-3 rounded-xl bg-[#4cc9b1]/15 border border-[#4cc9b1]/40 flex items-center justify-between text-xs text-[#0f766e]">
               <div className="flex items-center gap-2">
@@ -308,7 +300,6 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
             </div>
           )}
 
-          {/* Notes (Optional) */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
               Notes / Context <span className="text-slate-400 font-normal">(optional)</span>
@@ -321,8 +312,6 @@ export const CustomerModal = ({ isOpen, onClose, onSave, initialData = null, isS
               className="w-full px-3.5 py-2 rounded-xl bg-[#f4f1ec] border border-[#e2dbcb] focus:border-[#4cc9b1] focus:ring-1 focus:ring-[#4cc9b1] text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none resize-none"
             />
           </div>
-
-          {/* Actions */}
           <div className="mt-6 pt-4 border-t border-[#e2dbcb] flex items-center justify-end space-x-3">
             <button
               type="button"
