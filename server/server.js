@@ -60,6 +60,7 @@ app.get('/api/health', (req, res) => {
 
 // Customer API Routes
 app.use('/api/customers', customerRoutes);
+app.use('/customers', customerRoutes);
 
 // 404 Route Handler
 app.use((req, res) => {
